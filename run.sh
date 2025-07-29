@@ -1,7 +1,8 @@
 #!/bin/bash
 
 set -e
-log_file=iacm-migration-$(date "+%Y%m%d%H%M%S").log
+cd $(dirname $0)
+log_file=$(pwd)/iacm-migration-$(date "+%Y%m%d%H%M%S").log
 
 csv_file="$1"
 git_branch="iacm-migration-$RANDOM"
