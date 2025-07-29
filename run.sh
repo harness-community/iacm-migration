@@ -98,7 +98,7 @@ EOF
         echo "yes" | tofu init -migrate-state 2>&1 >$log_file
 
         # commit and push chnages to git
-        git checkout -b "$git_branch" 2>&1 >$log_file
+        git checkout $(git show-ref --verify --quiet refs/heads/$git_branch || echo '-b') "$git_branch" 2>&1 >$log_file
         git add harness-backend.tf 2>&1 >$log_file
         git commit -a -m "Remove backend configuration" 2>&1 >$log_file
         git push -u origin "$git_branch" 2>&1 >$log_file
