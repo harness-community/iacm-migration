@@ -26,8 +26,8 @@ locals {
 }
 
 resource "harness_platform_secret_text" "iacm_backend_secret" {
-  identifier  = "iacm_backend_harness_api_token"
-  name        = local.iacm_backend_secret_id
+  identifier  = local.iacm_backend_secret_id
+  name        = "iacm_backend_harness_api_token"
   description = "Harness API Token used to access IaCM backends, created by https://github.com/harness-community/iacm-migration"
 
   secret_manager_identifier = "harnessSecretManager"
