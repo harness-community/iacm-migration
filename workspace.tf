@@ -1,4 +1,7 @@
 locals {
+  # Count of csv entries without the iacm_backend_secret field set, to skip automatic creation of secret when all are defined
+  has_undefined_iacm_backend_secrets = length(setintersection([for workspace in csvdecode(file("${path.module}/${var.workspace_csv}")) : {secret = workspace.iacm_backend_secret}], [{"secret" = ""}]))
+
   workspaces = [for workspace in csvdecode(file("${path.module}/${var.workspace_csv}")) : {
     tf_variables = workspace.tf_variables_json != "" ? jsondecode(file("${path.module}/${workspace.tf_variables_json}")) : []
     env_variables = workspace.env_variables_json != "" ? jsondecode(file("${path.module}/${workspace.env_variables_json}")) : []
@@ -26,6 +29,8 @@ locals {
 }
 
 resource "harness_platform_secret_text" "iacm_backend_secret" {
+  # Only create if there are no workspace entries that do not define an iacm_backend_secret
+  count = local.has_undefined_iacm_backend_secrets > 0 ? 1 : 0
   identifier  = local.iacm_backend_secret_id
   name        = "iacm_backend_harness_api_token"
   description = "Harness API Token used to access IaCM backends, created by https://github.com/harness-community/iacm-migration"
