@@ -15,7 +15,7 @@ export TF_HTTP_PASSWORD="$HARNESS_PLATFORM_API_KEY"
 
 # Create Harness workspaces using CSV
 echo "Creating workspace in Harness..."
-tofu init 2>&1 >$log_file
+tofu init >>$log_file 2>&1
 tofu apply -var workspace_csv="$csv_file"
 
 # Ask for approval to commit backend updates, and migrate states
@@ -53,7 +53,7 @@ do
         last_working_dir=$(pwd)
         cd $tf_path
 
-        tofu init 2>&1 >$log_file
+        tofu init >>$log_file 2>&1
 
         echo "Removing Backend configuration..."
 
@@ -93,16 +93,24 @@ terraform {
     }
 }
 EOF
+        # Add backend configuration to Git
+        git add harness-backend.tf >>$log_file 2>&1
 
         # Migrate state
         echo "Migrating state..."
-        echo "yes" | tofu init -migrate-state 2>&1 >$log_file
+        echo "yes" | tofu init -migrate-state >>$log_file 2>&1
 
-        # commit and push chnages to git
-        git checkout $(git show-ref --verify --quiet refs/heads/$git_branch || echo '-b') "$git_branch" 2>&1 >$log_file
-        git add harness-backend.tf 2>&1 >$log_file
-        git commit -a -m "Remove backend configuration" 2>&1 >$log_file
-        git push -u origin "$git_branch" 2>&1 >$log_file
+        # Commit and push changes removing existing backend configuration to git
+        git status >>$log_file 2>&1 # Run git status to refresh index
+        if [ ! -z "$(git diff-index HEAD --name-only)" ] # Only perform git operations if there are changes to commit
+        then
+            git checkout $(git show-ref --verify --quiet refs/heads/$git_branch || echo '-b') "$git_branch" >>$log_file 2>&1
+            git commit -a -m "Remove backend configuration" >>$log_file 2>&1
+            git push -u origin "$git_branch" >>$log_file 2>&1
+        else
+            # Found no changes to commit, log but move on
+            echo "Warning:  No backend changes to commit, moving to next workspace"
+        fi
 
         cd $last_working_dir
     fi
