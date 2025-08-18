@@ -1,12 +1,14 @@
 # IaCM Migration Utility
+This utility helps create workspace(s) in Harness IaCM and migrates Infrastructure State(s) from local machine to Harness IaCM workspace(s). All workspaces are created inside the same account, organization and project.
 
 ## Prerequisites
-
-### Dependencies
-* OpenTofu
-* git
-* [hcledit](https://github.com/minamijoyo/hcledit)
-* perl
+1. Clone this repo.
+2. Install following dependancies:
+    * openTofu
+    * git
+    * [hcledit](https://github.com/minamijoyo/hcledit)
+    * perl
+3. Generate a Harness [API key](https://developer.harness.io/docs/platform/automation/api/add-and-manage-api-keys/)
 
 ### Setup
 * Create `.env` file with your Harness account ID and api key, using `.env.example` as an example
@@ -35,5 +37,4 @@
 
 
 ## Usage
-
 To run the migration utility, type `./run.sh input.csv`
