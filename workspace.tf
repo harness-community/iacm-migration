@@ -15,8 +15,8 @@ locals {
     repository_branch       = workspace.repository_branch
     repository_path         = workspace.repository_path
     cost_estimation_enabled = workspace.cost_estimation_enabled == "false" ? false : true # default to true
-    provider_connector_id   = workspace.provider_connector_id
-    github_connector_id     = workspace.github_connector_id
+    provider_connector   = workspace.provider_connector
+    repository_connector     = workspace.repository_connector
     iacm_backend_secret     = workspace.iacm_backend_secret != "" ? workspace.iacm_backend_secret : local.iacm_backend_secret_id
   }]
 
@@ -47,8 +47,8 @@ resource "harness_platform_workspace" "workspace" {
   repository_branch       = each.value.repository_branch
   repository_path         = each.value.repository_path
   cost_estimation_enabled = each.value.cost_estimation_enabled # default to true
-  provider_connector      = each.value.provider_connector_id
-  repository_connector    = each.value.github_connector_id
+  provider_connector      = each.value.provider_connector
+  repository_connector    = each.value.repository_connector
 
   dynamic "terraform_variable" {
     for_each = each.value.tf_variables

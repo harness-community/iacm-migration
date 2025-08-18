@@ -18,19 +18,19 @@ This utility helps create workspace(s) in Harness IaCM and migrates Infrastructu
 ### `input.csv` schema
 | Name                   | Description                                                                                  | Example Value                                    | Required |
 |------------------------|----------------------------------------------------------------------------------------------|--------------------------------------------------|----------|
-| workspace_path         | Relative local path to your workspace that was cloned on your local. Path needs to be relative from the folder where you will run the script. | workspaces/verint/env2                           | Yes      |
+| workspace_path         | Relative local path to your workspace that was cloned on your local. Path needs to be relative from the folder where you will run the script. | workspaces/app1/env2                           | Yes      |
 | workspace_name         | Workspace name to be created in Harness                                                      | env2                                             | Yes      |
 | workspace_id           | Workspace ID to be created in Harness                                                        | env2                                             | Yes      |
 | org_id                 | Harness Org ID where workspace is to be created                                              | default                                          | Yes      |
-| project_id             | Harness Project ID where workspace is to be created                                          | Tushar                                           | Yes      |
+| project_id             | Harness Project ID where workspace is to be created                                          | App1                                           | Yes      |
 | provisioner_type       | `opentofu` or `terraform`                                                                    | opentofu                                         | Yes      |
 | provisioner_version    | Version for `provisioner_type` above                                                         | 1.91                                             | Yes      |
-| repository             | Your repo URL to be migrated                                                                 | https://github.com/tusharkapadi/verint          | Yes      |
+| repository             | Your repo URL to be migrated                                                                 | https://github.com/app1/tf          | Yes      |
 | repository_branch      | Your repo branch to be associated with the workspace                                         | main                                             | Yes      |
-| repository_path        | **Should rename to:** `repository_folder_path`<br>Relative path from your repo to your workspace/state to be migrated | env2/                                            | Yes      |
+| repository_path        | Relative path from your repo to your workspace/state to be migrated | env2/                                            | Yes      |
 | cost_estimation_enabled| Cost estimation enabled - true or false                                                      | true                                             | Yes       |
-| provider_connector_id  | **Should rename to:** `provider_connector`<br>Harness provider connector ID                  | awsoidcconnector                                 | Yes      |
-| github_connector_id    | **Should rename to:** `repository_connector`<br>Harness repository connector ID              | tushargithubconnector                           | Yes      |
+| provider_connector  | Harness provider connector ID                  | awsoidcconnector                                 | Yes      |
+| repository_connector    | Harness repository connector ID              | tushargithubconnector                           | Yes      |
 | tf_variables_json      | Relative path of a json file containing Terraform variables to be created in Harness         | configs/example_workspace/tf_variables.json      | No       |
 | env_variables_json     | Relative path of a json file containing Environment variables to be created in Harness       | configs/example_workspace/env_variables.json     | No       |
 | tf_variable_files_json | Relative path of a json file containing Terraform variables to be created in Harness         | configs/example_workspace/tf_variables_files.json| No       |
